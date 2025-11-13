@@ -27,14 +27,17 @@ Alinhado aos ODS 4 (Educação de Qualidade) e ODS 8 (Trabalho Decente e Crescim
 - `skillup/`
   - `src/main/java/com/fiap/skillup/` — código fonte
     - `SkillUpApplication.java` — aplicação principal
-    - `modelo/` — entidades JPA (Usuario, Competencia, Curso, TrilhaAprendizagem, etc.)
-    - `repositorio/` — repositórios Spring Data
-    - `service/` — regras de negócio (a criar)
-    - `controller/` — endpoints REST/Thymeleaf (a criar)
-    - `config/` — segurança, cache, i18n, mensageria (a criar)
+    - `model/` — entidades JPA (Usuario, Competencia, Curso, TrilhaAprendizagem, etc.)
+    - `repository/` — repositórios Spring Data
+    - `service/` — regras de negócio (cache, paginação, recomendações)
+    - `controller/` — endpoints REST
+    - `security/` — JWT, filtros e configuração
+    - `messaging/` — RabbitMQ (exchange/queue/binding, producer/consumer)
+    - `config/` — i18n, OpenAPI, seeds dev
   - `src/main/resources/`
     - `application.yml` — configurações (dev/prod)
-    - `i18n/` — arquivos de mensagens (a criar)
+    - `i18n/` — arquivos de mensagens (pt-BR/en)
+    - `static/` — frontend estático (index.html, app.js, styles.css)
   - `pom.xml`
 
 ---
@@ -65,9 +68,14 @@ Perfis ativos:
 
 ## Como executar (dev)
 ```powershell
-# na raiz do projeto
-mvn spring-boot:run -pl skillup -Dspring-boot.run.profiles=dev
+# na pasta skillup
+$env:SPRING_PROFILES_ACTIVE="dev"; mvn spring-boot:run
 ```
+
+- Base URL: `http://localhost:8081/api`
+- H2 Console: `http://localhost:8081/api/h2-console` (JDBC: `jdbc:h2:mem:skillup`, user: `sa`, senha: vazia)
+- Swagger UI: `http://localhost:8081/api/swagger-ui/index.html`
+- Frontend estático: `http://localhost:8081/api/index.html`
 
 Build do pacote:
 ```powershell
@@ -83,15 +91,22 @@ mvn -q -DskipTests package -pl skillup
 ---
 
 ## Segurança (JWT)
-- Perfis: `ROLE_ADMIN`, `ROLE_USUARIO`
+- Perfis: `ROLE_ADMIN`, `ROLE_USER`
 - Fluxo: login → emissão de token → autorização por rotas
-- Coloque o token no header `Authorization: Bearer <token>`
+- Header: `Authorization: Bearer <token>`
+- Seed (profile `dev`): `admin@skillup.com` / `Senha@123`
+- Login: `POST /api/auth/login` → `{ token: "..." }`
+- Autorização de rotas:
+  - `GET /api/usuarios/**` e `GET /api/competencias/**`: público
+  - `POST|PUT|DELETE /api/usuarios/**` e `/api/competencias/**`: `ROLE_ADMIN`
 
 ---
 
 ## Internacionalização (i18n)
-- Arquivos em `src/main/resources/i18n/mensagens_*.properties`
-- Idiomas: `pt-BR` e `en-US` (a criar)
+- Arquivos em `src/main/resources/i18n/mensagens*.properties`
+- Idiomas: `pt-BR` (default) e `en-US`
+- Força idioma via query param: `?lang=en`
+- Ex.: `GET /api/ping` e `GET /api/ping?lang=en`
 
 ---
 
@@ -107,18 +122,23 @@ mvn -q -DskipTests package -pl skillup
 ---
 
 ## Tratamento de erros
-- `@ControllerAdvice` centralizando respostas amigáveis (a criar)
+- `@ControllerAdvice` centralizando respostas amigáveis (payload `ApiErro`)
 
 ---
 
 ## Mensageria (RabbitMQ)
-- Fila para processamento assíncrono de recomendações de IA (producer/consumer a criar)
+- Exchange/Queue/Binding configurados, conversor JSON, producer/consumer habilitados
+- Publicar solicitação: `POST /api/recomendacoes/{usuarioId}` (HTTP 202)
+- Consumo: listener registra no log a mensagem recebida
+- Requer RabbitMQ disponível (host padrão: `localhost:5672`)
 
 ---
 
 ## IA Generativa
-- Endpoint alvo: `GET /api/recomendacoes/{usuarioId}`
-- Integração com API de IA (ex.: OpenAI) usando chave e modelo configuráveis
+- Endpoints:
+  - `GET /api/recomendacoes/{usuarioId}/gerar` — mock (sem chave)
+  - `GET /api/recomendacoes/{usuarioId}/ai` — IA com fallback para mock
+- Configuração em `application.yml` (profile dev usa fallback se `aplicacao.ia.chave-api` não definida)
 
 ---
 
@@ -146,14 +166,16 @@ mvn -q test -pl skillup
 
 ---
 
+## Frontend (estático)
+- `src/main/resources/static/index.html` — página demo
+- Funcionalidades: login (JWT), listar usuários/competências, criar competência, recomendações (mock/IA), publicar na fila
+
+---
+
 ## Roadmap (próximos passos)
-- Controladores REST (Usuario, Competencia, Curso, Trilha)
-- Serviços com cache e paginação
-- Autenticação JWT e autorização por perfil
-- Producer/Consumer RabbitMQ
-- Integração real com IA no endpoint de recomendações
-- Migrations Flyway e dados seed
-- UI simples com Thymeleaf (ou frontend React)
+- Banco Oracle + Flyway (profile `prod`) — você irá preparar o Oracle
+- Consumer persistindo recomendações geradas (IA) e endpoint para consulta
+- Deploy no Azure App Service + CI/CD (GitHub Actions)
 
 ---
 

@@ -29,20 +29,20 @@ spring:
   cache:
     type: caffeine
     caffeine:
-      spec: tamanhoMaximo=500,expirarAposEscrita=300s
+      spec: maximumSize=500,expireAfterWrite=300s
   
   # Configuração do RabbitMQ
   rabbitmq:
     host: localhost
     port: 5672
-    username: convidado
-    password: convidado
+    username: guest
+    password: guest
 
 # Configuração do Servidor
-servidor:
-  porta: 8080
+server:
+  port: 8080
   servlet:
-    contexto: /api
+    context-path: /api
 
 # Configuração de Logs
 logging:
@@ -69,7 +69,7 @@ spring:
   messages:
     basename: i18n/mensagens
     encoding: UTF-8
-    tempo-cache: 3600
+    cache-duration: 3600
 
 # Ativação de perfis por ambiente
 spring:
@@ -108,10 +108,10 @@ spring:
   cache:
     type: redis
     redis:
-      tempo-vida: 3600000
+      time-to-live: 3600000
 
   rabbitmq:
     host: ${RABBITMQ_HOST:rabbitmq}
-    porta: ${RABBITMQ_PORT:5672}
-    usuario: ${RABBITMQ_USER:usuario}
-    senha: ${RABBITMQ_PASSWORD:senha}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:usuario}
+    password: ${RABBITMQ_PASSWORD:senha}

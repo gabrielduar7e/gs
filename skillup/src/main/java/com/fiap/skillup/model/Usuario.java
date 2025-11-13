@@ -1,4 +1,4 @@
-package com.fiap.skillup.modelo;
+package com.fiap.skillup.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-toString
-public class Usuario extends EntidadeBase implements UserDetails {
+public class Usuario extends BaseEntity implements UserDetails {
 
     @NotBlank(message = "Nome é obrigatório")
     @Size(max = 100, message = "Nome não pode ter mais que 100 caracteres")
@@ -104,7 +103,7 @@ public class Usuario extends EntidadeBase implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isAtivo();
+        return isActive();
     }
 
     /**
@@ -112,7 +111,7 @@ public class Usuario extends EntidadeBase implements UserDetails {
      */
     public enum Perfil {
         ADMIN(1, "ROLE_ADMIN"),
-        USUARIO(2, "ROLE_USUARIO");
+        USER(2, "ROLE_USER");
 
         private final int codigo;
         private final String descricao;

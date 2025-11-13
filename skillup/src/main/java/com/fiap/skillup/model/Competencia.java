@@ -1,4 +1,4 @@
-package com.fiap.skillup.modelo;
+package com.fiap.skillup.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -19,8 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-toString
-public class Competencia extends EntidadeBase {
+public class Competencia extends BaseEntity {
 
     @NotBlank(message = "Nome é obrigatório")
     @Size(max = 100, message = "Nome não pode ter mais que 100 caracteres")

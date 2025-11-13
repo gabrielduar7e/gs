@@ -1,4 +1,4 @@
-package com.fiap.skillup.modelo;
+package com.fiap.skillup.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,46 +8,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-/**
- * Classe base para todas as entidades do sistema.
- * Contém campos comuns como ID, datas de criação/atualização e status ativo.
- */
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class EntidadeBase {
+public abstract class BaseEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_padrao")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_gen")
     private Long id;
     
     @CreationTimestamp
-    @Column(name = "data_criacao", nullable = false, updatable = false)
-    private LocalDateTime dataCriacao;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
-    @Column(name = "data_atualizacao")
-    private LocalDateTime dataAtualizacao;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
     
-    @Column(name = "ativo", nullable = false)
-    private boolean ativo = true;
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
     
-    /**
-     * Método executado antes de persistir uma nova entidade.
-     * Define as datas de criação e atualização.
-     */
     @PrePersist
-    protected void aoCriar() {
-        this.dataCriacao = LocalDateTime.now();
-        this.dataAtualizacao = LocalDateTime.now();
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
     
-    /**
-     * Método executado antes de atualizar uma entidade.
-     * Atualiza a data de atualização.
-     */
     @PreUpdate
-    protected void aoAtualizar() {
-        this.dataAtualizacao = LocalDateTime.now();
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

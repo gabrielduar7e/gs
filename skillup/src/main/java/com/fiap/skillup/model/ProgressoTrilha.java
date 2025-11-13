@@ -2,6 +2,8 @@ package com.fiap.skillup.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.*;
 
 import java.time.LocalDateTime;

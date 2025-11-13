@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SkillUp - Demo</title>
+  <link rel="stylesheet" href="/api/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>SkillUp API - Demo Frontend</h1>
+    <div id="auth-status">
+      <span id="user-info">Não autenticado</span>
+      <button id="btn-logout" class="secondary" style="display:none">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Login</h2>
+      <form id="login-form">
+        <div class="row">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="admin@skillup.com" required />
+        </div>
+        <div class="row">
+          <label for="senha">Senha</label>
+          <input id="senha" type="password" placeholder="Senha@123" required />
+        </div>
+        <button type="submit">Entrar</button>
+        <span class="hint">Use o seed admin do profile dev.</span>
+      </form>
+      <pre id="login-result" class="result"></pre>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Usuários (GET público)</h2>
+        <div class="actions">
+          <button id="btn-load-usuarios">Carregar Usuários</button>
+        </div>
+        <pre id="usuarios-result" class="result"></pre>
+      </div>
+
+      <div class="card">
+        <h2>Competências (GET público)</h2>
+        <div class="actions">
+          <button id="btn-load-competencias">Carregar Competências</button>
+        </div>
+        <pre id="competencias-result" class="result"></pre>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Criar Competência (ADMIN - requer JWT)</h2>
+      <form id="competencia-form">
+        <div class="row">
+          <label for="c-nome">Nome</label>
+          <input id="c-nome" type="text" placeholder="Java" required />
+        </div>
+        <div class="row">
+          <label for="c-desc">Descrição</label>
+          <input id="c-desc" type="text" placeholder="Linguagem de programação" required />
+        </div>
+        <div class="row">
+          <label for="c-cat">Categoria</label>
+          <select id="c-cat">
+            <option value="TECNICA">Técnica</option>
+            <option value="COMPORTAMENTAL">Comportamental</option>
+          </select>
+        </div>
+        <button type="submit">Criar</button>
+      </form>
+      <pre id="competencia-result" class="result"></pre>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Recomendações Mock</h2>
+        <div class="actions">
+          <input id="r-usuario" type="number" min="1" placeholder="Usuário ID (ex: 1)" />
+          <button id="btn-rec-mock">Gerar Mock</button>
+        </div>
+        <pre id="rec-mock-result" class="result"></pre>
+      </div>
+
+      <div class="card">
+        <h2>Recomendações IA (com fallback)</h2>
+        <div class="actions">
+          <input id="r-usuario-ia" type="number" min="1" placeholder="Usuário ID (ex: 1)" />
+          <button id="btn-rec-ia">Gerar via IA</button>
+        </div>
+        <pre id="rec-ia-result" class="result"></pre>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Mensageria (RabbitMQ)</h2>
+      <div class="actions">
+        <input id="mq-usuario" type="number" min="1" placeholder="Usuário ID (ex: 1)" />
+        <button id="btn-mq-publicar">Publicar solicitação</button>
+      </div>
+      <pre id="mq-result" class="result"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <small>SkillUp &copy; 2025</small>
+  </footer>
+
+  <script src="/api/app.js"></script>
+</body>
+</html>

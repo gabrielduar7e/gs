@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +17,8 @@ public interface UsuarioRepository extends BaseRepository<Usuario> {
     
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE p = :perfil")
     List<Usuario> findByPerfil(@Param("perfil") Integer perfil);
+
+    Page<Usuario> findAllByActiveTrue(Pageable pageable);
+
+    Page<Usuario> findByNomeContainingIgnoreCaseAndActiveTrue(String nome, Pageable pageable);
 }

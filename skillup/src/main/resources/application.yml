@@ -1,0 +1,117 @@
+spring:
+  application:
+    name: skillup
+  
+  # Configuração do Banco de Dados
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/ORCLCDB
+    username: skillup
+    password: skillup123
+    driver-class-name: oracle.jdbc.OracleDriver
+  
+  # Configuração JPA
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.Oracle12cDialect
+  
+  # Configuração do Flyway
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  
+  # Configuração de Cache
+  cache:
+    type: caffeine
+    caffeine:
+      spec: tamanhoMaximo=500,expirarAposEscrita=300s
+  
+  # Configuração do RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: convidado
+    password: convidado
+
+# Configuração do Servidor
+servidor:
+  porta: 8080
+  servlet:
+    contexto: /api
+
+# Configuração de Logs
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.fiap.skillup: DEBUG
+
+# Propriedades Personalizadas
+aplicacao:
+  seguranca:
+    jwt:
+      segredo: ${JWT_SECRET:chaveSecretaSkillup}
+      expiracao: 86400000 # 24 horas em milissegundos
+  
+  # Integração com IA
+  ia:
+    chave-api: ${CHAVE_IA_API:sua-chave-api-ia}
+    endpoint: https://api.openai.com/v1/chat/completions
+    modelo: gpt-4
+
+# Internacionalização
+spring:
+  messages:
+    basename: i18n/mensagens
+    encoding: UTF-8
+    tempo-cache: 3600
+
+# Ativação de perfis por ambiente
+spring:
+  profiles:
+    active: dev
+
+---
+# Perfil de Desenvolvimento
+spring:
+  config:
+    activate:
+      on-profile: dev
+  
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+---
+# Perfil de Produção
+spring:
+  config:
+    activate:
+      on-profile: prod
+  
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  
+  cache:
+    type: redis
+    redis:
+      tempo-vida: 3600000
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    porta: ${RABBITMQ_PORT:5672}
+    usuario: ${RABBITMQ_USER:usuario}
+    senha: ${RABBITMQ_PASSWORD:senha}

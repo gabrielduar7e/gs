@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @IdClass(UsuarioCompetencia.UsuarioCompetenciaId.class)
-public class UsuarioCompetencia extends BaseEntity {
+public class UsuarioCompetencia {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

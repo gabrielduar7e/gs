@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @CreationTimestamp

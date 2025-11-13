@@ -38,6 +38,16 @@ spring:
     username: guest
     password: guest
 
+  # Internacionalização
+  messages:
+    basename: i18n/mensagens
+    encoding: UTF-8
+    cache-duration: 3600
+
+  # Ativação de perfis por ambiente
+  profiles:
+    active: dev
+
 # Configuração do Servidor
 server:
   port: 8080
@@ -64,17 +74,7 @@ aplicacao:
     endpoint: https://api.openai.com/v1/chat/completions
     modelo: gpt-4
 
-# Internacionalização
-spring:
-  messages:
-    basename: i18n/mensagens
-    encoding: UTF-8
-    cache-duration: 3600
-
-# Ativação de perfis por ambiente
-spring:
-  profiles:
-    active: dev
+ 
 
 ---
 # Perfil de Desenvolvimento
@@ -83,15 +83,27 @@ spring:
     activate:
       on-profile: dev
   
+  datasource:
+    url: jdbc:h2:mem:skillup;DB_CLOSE_DELAY=-1;MODE=Oracle
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
   
   h2:
     console:
       enabled: true
       path: /h2-console
+
+  flyway:
+    enabled: false
 
 ---
 # Perfil de Produção

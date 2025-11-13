@@ -54,6 +54,15 @@ server:
   servlet:
     context-path: /api
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+
 # Configuração de Logs
 logging:
   level:
@@ -104,6 +113,12 @@ spring:
 
   flyway:
     enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
 
 ---
 # Perfil de Produção

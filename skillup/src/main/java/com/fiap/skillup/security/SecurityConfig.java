@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/ping", "/actuator/health", "/actuator/info", "/h2-console/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/styles.css", "/app.js").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios/**", "/competencias/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios/**", "/competencias/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/usuarios/**", "/competencias/**").hasRole("ADMIN")

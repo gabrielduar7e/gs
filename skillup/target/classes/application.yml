@@ -74,7 +74,7 @@ logging:
 aplicacao:
   seguranca:
     jwt:
-      segredo: ${JWT_SECRET:chaveSecretaSkillup}
+      segredo: ${JWT_SECRET:Q2hhdmVTZWNyZXRhU2tpbGx1cF9TRUNSRVRPX0pXVF9IUzI1Ng==}
       expiracao: 86400000 # 24 horas em milissegundos
   
   # Integração com IA

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -21,9 +22,11 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Cacheable(value = "usuarios", key = "T(String).format('%s|%s|%s', #nome, #pageable.pageNumber, #pageable.pageSize)")
@@ -51,7 +54,7 @@ public class UsuarioService {
         Usuario usuario = Usuario.builder()
                 .nome(dto.getNome())
                 .email(dto.getEmail())
-                .senha(dto.getSenha())
+                .senha(passwordEncoder.encode(dto.getSenha()))
                 .perfis(dto.getPerfis())
                 .build();
         usuario = usuarioRepository.save(usuario);
@@ -65,7 +68,7 @@ public class UsuarioService {
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
         if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
-            usuario.setSenha(dto.getSenha());
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
         if (dto.getPerfis() != null) {
             usuario.setPerfis(dto.getPerfis());

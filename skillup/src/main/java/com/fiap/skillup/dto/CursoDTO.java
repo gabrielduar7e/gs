@@ -16,7 +16,7 @@ public class CursoDTO {
     private String titulo;
     private String descricao;
     private Integer duracaoHoras;
-    private String nivelDificuldade;
+    private Integer nivelDificuldade;
     private BigDecimal preco;
     private String status;
 }

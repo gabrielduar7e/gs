@@ -1,0 +1,22 @@
+# Maven
+/skillup/target/
+.mvn/
+
+# IDEs
+/.idea/
+*.iml
+/.project
+/.classpath
+/.settings/
+/.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build outputs
+/skillup/target/
+/surefire-reports/
